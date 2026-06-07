@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/paymedia_crm
+    username: root
+    password: Arafath0313
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  application:
+    name: paymedia-crm
+
+jwt:
+  secret: PayMediaCRMSecretKeyForJwtAuthentication2026PayMedia
+  expiration: 86400000
