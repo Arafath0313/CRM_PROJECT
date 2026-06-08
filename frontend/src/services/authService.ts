@@ -33,3 +33,20 @@ export const verifyOtp = async (otp: string) => {
   const response = await api.post("/api/auth/verify-otp", { otp });
   return response.data;
 };
+
+export const forgotPassword = async (email: string) => {
+  const response = await api.post("/api/auth/forgot-password", { email });
+  return response.data;
+};
+
+export const validateResetToken = async (token: string) => {
+  const response = await api.get("/api/auth/reset-password/validate", {
+    params: { token },
+  });
+  return response.data;
+};
+
+export const resetPassword = async (payload: { token: string; newPassword: String }) => {
+  const response = await api.post("/api/auth/reset-password", payload);
+  return response.data;
+};

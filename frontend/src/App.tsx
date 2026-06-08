@@ -8,6 +8,11 @@ import OtpVerification from "./pages/OtpVerification";
 import Success from "./pages/Success";
 import Dashboard from "./pages/Dashboard";
 
+import ForgotPassword from "./pages/ForgotPassword";
+import CheckInbox from "./pages/CheckInbox";
+import ResetPassword from "./pages/ResetPassword";
+import ResetSuccess from "./pages/ResetSuccess";
+
 function App() {
   return (
     <AuthProvider>
@@ -19,6 +24,11 @@ function App() {
           <Route path="/register"    element={<Register />} />
           <Route path="/verify-otp"  element={<OtpVerification />} />
           <Route path="/success"     element={<Success />} />
+          
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/check-inbox"     element={<CheckInbox />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/reset-success"   element={<ResetSuccess />} />
 
           {/* ── Protected routes ───────────────────────────── */}
           <Route

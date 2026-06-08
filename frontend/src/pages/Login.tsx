@@ -123,6 +123,7 @@ const Login = () => {
                 </label>
                 <button
                   type="button"
+                  onClick={() => navigate("/forgot-password")}
                   className="text-xs font-semibold text-teal-600 hover:text-teal-700 transition-colors"
                 >
                   Forgot Password?

@@ -11,6 +11,8 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { register } from "../services/authService";
+import { PasswordStrength } from "../components/PasswordStrength";
+import { type PasswordStrengthLevel } from "../utils/passwordValidator";
 
 // ─── Field component ───────────────────────────────────────────────────────
 
@@ -87,7 +89,8 @@ const validate = (
   mobileNumber: string,
   email: string,
   password: string,
-  confirmPassword: string
+  confirmPassword: string,
+  passwordStrength: PasswordStrengthLevel
 ): FormErrors => {
   const errors: FormErrors = {};
 
@@ -107,8 +110,8 @@ const validate = (
 
   if (!password) {
     errors.password = "Password is required.";
-  } else if (password.length < 8) {
-    errors.password = "Password must be at least 8 characters.";
+  } else if (passwordStrength !== "Good" && passwordStrength !== "Strong") {
+    errors.password = "Password must be at least 'Good' (meets 4 or more rules).";
   }
 
   if (!confirmPassword) {
@@ -130,6 +133,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState<PasswordStrengthLevel>("Weak");
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -141,7 +145,7 @@ const Register = () => {
   const handleSubmit = async () => {
     setGlobalError(null);
 
-    const errors = validate(fullName, mobileNumber, email, password, confirmPassword);
+    const errors = validate(fullName, mobileNumber, email, password, confirmPassword, passwordStrength);
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
@@ -287,6 +291,12 @@ const Register = () => {
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 }
+              />
+
+              {/* Password Strength Indicator */}
+              <PasswordStrength
+                password={password}
+                onStrengthChange={setPasswordStrength}
               />
 
               {/* Confirm Password */}

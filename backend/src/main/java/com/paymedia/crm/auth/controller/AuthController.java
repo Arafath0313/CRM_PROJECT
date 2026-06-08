@@ -3,11 +3,14 @@ package com.paymedia.crm.auth.controller;
 import com.paymedia.crm.auth.dto.LoginResponse;
 import com.paymedia.crm.auth.dto.LoginRequest;
 import com.paymedia.crm.auth.dto.RegisterRequest;
+import com.paymedia.crm.auth.dto.VerifyOtpRequest;
+import com.paymedia.crm.auth.dto.ForgotPasswordRequest;
+import com.paymedia.crm.auth.dto.ResetPasswordRequest;
 import com.paymedia.crm.auth.service.AuthService;
+import com.paymedia.crm.auth.service.PasswordResetService;
 import com.paymedia.crm.common.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
-import com.paymedia.crm.auth.dto.VerifyOtpRequest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping("/register")
 public ApiResponse<String> register(
@@ -56,6 +60,48 @@ public ResponseEntity<ApiResponse<LoginResponse>> login(
         return new ApiResponse<>(
                 true,
                 "Email verified successfully",
+                null
+        );
+    }
+
+    @PostMapping("/forgot-password")
+    public ApiResponse<String> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request) {
+
+        passwordResetService.initiatePasswordReset(request.getEmail());
+
+        return new ApiResponse<>(
+                true,
+                "If an account is registered with this email, a reset link has been sent.",
+                null
+        );
+    }
+
+    @GetMapping("/reset-password/validate")
+    public ApiResponse<String> validateResetToken(
+            @RequestParam String token) {
+
+        passwordResetService.validateToken(token);
+
+        return new ApiResponse<>(
+                true,
+                "Token is valid",
+                null
+        );
+    }
+
+    @PostMapping("/reset-password")
+    public ApiResponse<String> resetPassword(
+            @Valid @RequestBody ResetPasswordRequest request) {
+
+        passwordResetService.resetPassword(
+                request.getToken(),
+                request.getNewPassword()
+        );
+
+        return new ApiResponse<>(
+                true,
+                "Password has been reset successfully",
                 null
         );
     }
