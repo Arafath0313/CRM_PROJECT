@@ -27,20 +27,17 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Frontend origins
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174"));
 
         // HTTP methods the browser is allowed to use
         config.setAllowedMethods(
-                List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
         );
 
         // Headers the browser may send
         config.setAllowedHeaders(
-                List.of("Authorization", "Content-Type", "Accept")
+                List.of("Authorization", "Content-Type")
         );
-
-        // Headers the browser is allowed to read from the response
-        config.setExposedHeaders(List.of("Authorization"));
 
         // Allow cookies / Authorization header to be forwarded
         config.setAllowCredentials(true);
@@ -74,7 +71,8 @@ public class SecurityConfig {
 
                 // 4. Route authorization
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
 
